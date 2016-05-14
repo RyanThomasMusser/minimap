@@ -58,7 +58,7 @@ SOFTWARE.
         			if (html[i] === '<') { stop = true };      // stop when entering a tag
         			if (html[i] === '>') { stop = false };     // continue when exiting a tag
         			if (stop === false) {                      // inject dot into newHTML
-        				newHTML += '<span style="position:absolute; left:-9999px;">'+ '.' +'</span>';
+        				newHTML += '<span style="position:absolute; right:-999999999px;">'+ '.' +'</span>';
         			}
         			if (html[i] === ' ') { newHTML += ' '; }   // insert a space if the current character is a space
         		}
