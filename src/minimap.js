@@ -40,14 +40,39 @@ SOFTWARE.
             touch: true,
             smoothScroll: true,
             smoothScrollDelay: 200,
-            onPreviewChange: fn
+            onPreviewChange: fn,
+            disableFind : false
         };
         var settings = $.extend({}, defaults, options);
         var position = ["right", "left"];
 
+        jQuery.fn.disableFind = function(){
+          return this.each(function (){
+        		var newHTML = "";                             // create a new blank string
+        		var stop = false;                             // boolean to toggle whether we're in a tag or not
+        		var currentElement = $(this);                 // variable to hold the current element
+        		var html = currentElement.html();             // get html from current element
+        		for (var i = 0; i < html.length; i++)         // iterate through each character of the html
+        		{
+        			newHTML += html[i];                         // insert current character into newHTML
+        			if (html[i] === '<') { stop = true };      // stop when entering a tag
+        			if (html[i] === '>') { stop = false };     // continue when exiting a tag
+        			if (stop === false) {                      // inject dot into newHTML
+        				newHTML += '<span style="position:absolute; left:-9999px;">'+ '.' +'</span>';
+        			}
+        			if (html[i] === ' ') { newHTML += ' '; }   // insert a space if the current character is a space
+        		}
+        		currentElement.html(newHTML);                 // replace current element with newHTML
+        	});
+        };
+
         var validateProps = function(prop, value) {
 
             switch(prop) {
+                case 'disableFind':
+                  if(value != true && value != false)
+                      throw "Invalid disableFind: " + value;
+                  break;
                 case 'heightRatio':
                     var heightRatio = value;
                     if(!$.isNumeric(heightRatio) || heightRatio <= 0.0 || heightRatio > 1.0)
@@ -100,6 +125,9 @@ SOFTWARE.
         miniElement.find('.minimap.noselect').remove();
         miniElement.find('.miniregion').remove();
         miniElement.addClass('minimap noselect');
+        if(settings.disableFind === true){
+          miniElement.children().each(function() {$(this).addClass('unsearchable');});
+        }
         // remove events & customized cursors
         miniElement.children().each(function() {$(this).css({'pointer-events': 'none'});});
 
@@ -107,6 +135,7 @@ SOFTWARE.
 
         $($('body')[0]).append(region);
         $($('body')[0]).append(miniElement);
+        $('.unsearchable').disableFind();
 
         var scale = function() {
             return {
