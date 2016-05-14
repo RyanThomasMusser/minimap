@@ -46,6 +46,8 @@ SOFTWARE.
         var settings = $.extend({}, defaults, options);
         var position = ["right", "left"];
 
+        //when invoked, this function prevents browsers from finding
+        //duplicate text located in the minimap
         jQuery.fn.disableFind = function(){
           return this.each(function (){
         		var newHTML = "";                             // create a new blank string
@@ -125,9 +127,12 @@ SOFTWARE.
         miniElement.find('.minimap.noselect').remove();
         miniElement.find('.miniregion').remove();
         miniElement.addClass('minimap noselect');
+
+        //add the class that will be targeted by disableFind : true
         if(settings.disableFind === true){
           miniElement.children().each(function() {$(this).addClass('unsearchable');});
         }
+
         // remove events & customized cursors
         miniElement.children().each(function() {$(this).css({'pointer-events': 'none'});});
 
@@ -135,6 +140,8 @@ SOFTWARE.
 
         $($('body')[0]).append(region);
         $($('body')[0]).append(miniElement);
+
+        //invoke the function that prevents browser from finding duplicate text in minimap
         $('.unsearchable').disableFind();
 
         var scale = function() {
