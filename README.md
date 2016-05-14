@@ -56,7 +56,7 @@ var previewBody = $('body').minimap();
 ### smoothScrollDelay
 > Smooth scroll delay in milliseconds. (default: 200ms)
 
-### touch
+### disableFind
 > `disableFind` if true, prevents browser CTRL+F from finding duplicated text in minimap. (default: *false*)
 
 ## Setters
